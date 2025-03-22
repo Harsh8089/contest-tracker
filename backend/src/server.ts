@@ -14,6 +14,9 @@ app.use(cors({
   origin: "*"
 }));
 
+import router from "./router/router";;
+app.use("/api/v1", router);
+
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log("Server activated on port", PORT);
