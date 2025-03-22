@@ -4,24 +4,44 @@ import { fetchContests as codeforcesContests } from "../service/codeforces.servi
 
 const router = express.Router();
 
+const sendSuccessResponse = (res: Response, data: any, statusCode: number = 200): void => {
+  res.status(statusCode).json(data);
+};
+
+const sendErrorResponse = (res: Response, message: string, statusCode: number = 500): void => {
+  res.status(statusCode).json({ message });
+};
+
+
+router.get("/all/contests", async (req: Request, res: Response): Promise<void> => {
+  try {
+    const contestDetails = await Promise.allSettled([codechefContests(), codeforcesContests()]);
+
+    const fulfilledDetails = contestDetails.filter(contest => contest.status === 'fulfilled');
+
+    if(!fulfilledDetails.length) {
+      sendErrorResponse(res, "Something went wrong", 404);
+      return;
+    }
+
+    sendSuccessResponse(res, fulfilledDetails, 200);
+  } catch (error) {
+    sendErrorResponse(res, "Internal Server Error");
+  }
+});
+
 router.get("/codechef/contests", async (req: Request, res: Response): Promise<void> => {
   try {
     const contestDetails = await codechefContests();
 
-    if (!contestDetails) {
-      res.status(404).json({
-        message: "Something went wrong"
-      });
+    if(!contestDetails) {
+      sendErrorResponse(res, "Something went wrong", 404);
       return;
     }
 
-    res.status(200).json({
-      contestDetails
-    });
+    sendSuccessResponse(res, contestDetails, 200);
   } catch (error) {
-    res.status(500).json({
-      message: "Internal Server Error",
-    });
+    sendErrorResponse(res, "Internal Server Error");
   }
 });
 
@@ -29,20 +49,14 @@ router.get("/codeforces/contests", async (req: Request, res: Response): Promise<
   try {
     const contestDetails = await codeforcesContests();
 
-    if (!contestDetails) {
-      res.status(404).json({
-        message: "Something went wrong"
-      });
+    if(!contestDetails) {
+      sendErrorResponse(res, "Something went wrong", 404);
       return;
     }
 
-    res.status(200).json({
-      contestDetails
-    });
+    sendSuccessResponse(res, contestDetails, 200);
   } catch (error) {
-    res.status(500).json({
-      message: "Internal Server Error",
-    });
+    sendErrorResponse(res, "Internal Server Error");
   }
 });
 

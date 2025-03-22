@@ -1,5 +1,13 @@
 import axios from "axios";
-import { Contest, Contests, Status } from "../types/contest";
+import { 
+  Contest, 
+  Contests, 
+  Status 
+} from "../types/contest";
+import { 
+  BASE_URL, 
+  CONTEST_URL 
+} from "../utils/codeforces.utils";
 
 type CodeforcesContest = {
   id: number,
@@ -16,13 +24,13 @@ const mapContests = (contests: CodeforcesContest[], status: Status): Contest[] =
     status,
     date: contest.startTimeSeconds,
     durationTime: Number(contest.durationSeconds),
-    url: `https://codeforces.com/${status === "upcoming" ? "contestRegistration" : "contest"}/${contest.id}` 
+    url: `${BASE_URL}/${status === "upcoming" ? "contestRegistration" : "contest"}/${contest.id}` 
   }));
 }
 
 export const fetchContests: () => Promise<Contests | null> = async () => {
   try {
-    const result = await axios.get('https://codeforces.com/api/contest.list');
+    const result = await axios.get(`${CONTEST_URL}`);
 
     if(result.status === 200) {
       const allContests = result.data.result;

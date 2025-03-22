@@ -1,5 +1,13 @@
 import axios from "axios";
-import { Contest, Contests, Status } from "../types/contest";
+import { 
+  Contest, 
+  Contests, 
+  Status 
+} from "../types/contest";
+import { 
+  BASE_URL, 
+  CONTEST_URL 
+} from "../utils/codechef.utils";
 
 type CodechefContest = {
   contest_code: string,
@@ -15,13 +23,13 @@ const mapContests = (contests: CodechefContest[], status: Status): Contest[] => 
     status,
     date: contest.contest_start_date,
     durationTime: Number(contest.contest_duration),
-    url: `https://www.codechef.com/${contest.contest_code}`,
+    url: `${BASE_URL}/${contest.contest_code}`,
   }));
 }
 
 export const fetchContests: () => Promise<Contests | null> = async () => {
   try {
-    const result = await axios.get('https://www.codechef.com/api/list/contests/all?sort_by=START&sorting_order=asc&offset=0&mode=all');
+    const result = await axios.get(`${CONTEST_URL}`);
 
     if(result.status === 200) {
       const futureContests: Contest[] = mapContests(result.data.future_contests, "upcoming");
