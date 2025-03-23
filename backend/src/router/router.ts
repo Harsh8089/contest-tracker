@@ -1,6 +1,13 @@
 import express, { Request, Response } from "express";
-import { fetchContests as codechefContests } from "../service/codechef.service";
-import { fetchContests as codeforcesContests } from "../service/codeforces.service";
+import { 
+  fetchContests as codechefContests 
+} from "../service/codechef.service";
+import { 
+  fetchContests as codeforcesContests 
+} from "../service/codeforces.service";
+import { 
+  fetchContests as leetcodeContests 
+} from "../service/leetcode.service";
 
 const router = express.Router();
 
@@ -15,7 +22,7 @@ const sendErrorResponse = (res: Response, message: string, statusCode: number = 
 
 router.get("/all/contests", async (req: Request, res: Response): Promise<void> => {
   try {
-    const contestDetails = await Promise.allSettled([codechefContests(), codeforcesContests()]);
+    const contestDetails = await Promise.allSettled([codechefContests(), codeforcesContests(), leetcodeContests()]);
 
     const fulfilledDetails = contestDetails.filter(contest => contest.status === 'fulfilled');
 
@@ -48,6 +55,21 @@ router.get("/codechef/contests", async (req: Request, res: Response): Promise<vo
 router.get("/codeforces/contests", async (req: Request, res: Response): Promise<void> => {
   try {
     const contestDetails = await codeforcesContests();
+
+    if(!contestDetails) {
+      sendErrorResponse(res, "Something went wrong", 404);
+      return;
+    }
+
+    sendSuccessResponse(res, contestDetails, 200);
+  } catch (error) {
+    sendErrorResponse(res, "Internal Server Error");
+  }
+});
+
+router.get("/leetcode/contests", async (req: Request, res: Response): Promise<void> => {
+  try {
+    const contestDetails = await leetcodeContests();
 
     if(!contestDetails) {
       sendErrorResponse(res, "Something went wrong", 404);
