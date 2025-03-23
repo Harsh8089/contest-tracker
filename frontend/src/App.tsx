@@ -1,7 +1,19 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import Calendar from "./pages/Calendar";
+import Admin from "./pages/Admin";
+import Layout from "./layout";
+
 const App = () => {
-  return <div className="w-[100vw] h-[100vh] bg-mint-500 text-white">
-    App
-  </div>
+  return <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Dashboard />} />
+        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/admin" element={<Admin />} />
+      </Route>
+    </Routes>
+  </BrowserRouter>
 }
 
 export default App;
