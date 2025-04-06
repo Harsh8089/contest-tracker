@@ -1,8 +1,12 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Route,
+  Routes
+} from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Calendar from "./pages/Calendar";
 import Admin from "./pages/Admin";
-import Layout from "./layout";
+import Layout from "./Layout";
 
 const App = () => {
   return <BrowserRouter>

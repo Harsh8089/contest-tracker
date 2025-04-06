@@ -1,7 +1,21 @@
-import { Calendar, House, RefreshCcw, Settings, Sun } from "lucide-react"
+import {
+  Calendar,
+  House,
+  RefreshCcw,
+  Settings,
+  Sun
+} from "lucide-react"
 import { Button } from "./ui/button";
-import { Link, useLocation } from "react-router-dom";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
+import {
+  Link,
+  useLocation
+} from "react-router-dom";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from "@radix-ui/react-tooltip";
 
 const navItems = [
   {
@@ -25,19 +39,19 @@ export default function Navbar() {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  return <header className="sticky top-0 z-10 border-b border-border">
-    <div className="w-full flex items-center justify-around py-4">
+  return <header className="sticky top-0 z-10 border-b border-border px-22">
+    <div className="w-full flex items-center justify-between py-4">
       <h1 className="text-xl font-bold">
         Contest Tracker
       </h1>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
         {navItems.map((item, index) => {
-          return <Button 
+          return <Button
             key={index}
-            variant={currentPath === item.link ? "secondary": "ghost"}
+            variant={currentPath === item.link ? "secondary" : "ghost"}
             size={"default"}
             children={
-              <Link 
+              <Link
                 to={item.link}
                 className="flex items-center gap-2"
               >
@@ -50,10 +64,10 @@ export default function Navbar() {
       </div>
       <div className="flex items-center gap-4">
         <Button
-          onClick={() => window.location.reload()}  
+          onClick={() => window.location.reload()}
           variant={"outline"}
         >
-          {<RefreshCcw />} 
+          <RefreshCcw />
           {/* className="animate-spin" */}
           {"Refresh"}
         </Button>
@@ -61,7 +75,7 @@ export default function Navbar() {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                onClick={() => {}}
+                onClick={() => { }}
                 variant={"ghost"}
                 size={"icon"}
                 className="p-2"
@@ -69,9 +83,9 @@ export default function Navbar() {
                 <Sun className="w-5 h-5" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent 
-              side="bottom" 
-              align="start" 
+            <TooltipContent
+              side="bottom"
+              align="start"
               className="bg-black text-white px-3 py-1 text-sm rounded shadow-md"
             >
               <p>Toggle Theme</p>
@@ -79,6 +93,6 @@ export default function Navbar() {
           </Tooltip>
         </TooltipProvider>
       </div>
-    </div>    
+    </div>
   </header>
 };
