@@ -4,7 +4,12 @@ export enum ContestPlatform {
   LEETCODE = 'leetcode',
 }
 
-export type Status = "on_going" | "completed" | "upcoming";
+export enum Status {
+  ALL = 'all',
+  ONGOING = 'ongoing',
+  UPCOMING = 'upcoming',
+  COMPLETED = 'completed'
+}
 
 export type Contest = {
   id: string,
@@ -13,6 +18,6 @@ export type Contest = {
   status: Status,
   startTime: string,
   endTime: string,
-  duration: number,
+  durationTime: number,
   url: string
 }
