@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import jwt from "jsonwebtoken";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -14,7 +13,7 @@ app.use(cors({
   origin: "*"
 }));
 
-import router from "./router/router";;
+import router from "./router/router";
 app.use("/api/v1", router);
 
 const PORT = process.env.PORT;

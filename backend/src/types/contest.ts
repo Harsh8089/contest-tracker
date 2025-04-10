@@ -2,12 +2,13 @@ export type Contest = {
   id: string,
   name: string,
   status: Status,
-  date: Date,
-  durationTime: number,
+  startTime: string,
+  endTime?: string
+  durationTime: number, // in mins
   url: string,
 }
 
-export type Status = "on_going" | "completed" | "upcoming";
+export type Status = "ongoing" | "completed" | "upcoming";
 
 export type Contests = {
   platform: "codechef" | "codeforces" | "leetcode",

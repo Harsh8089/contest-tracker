@@ -8,6 +8,7 @@ import {
   BASE_URL, 
   CONTEST_URL 
 } from "../utils/codeforces.utils";
+import { epochToIST } from "../utils/date.utils";
 
 export type CodeforcesContest = {
   id: number,
@@ -17,17 +18,21 @@ export type CodeforcesContest = {
   phase: "BEFORE" | "CODING" | "FINISHED",
 }
 
-const istOffset = 330 * 60 * 1000;
-
 const mapContests = (contests: CodeforcesContest[], status: Status): Contest[] => {
-  return contests.map((contest) => ({
-    id: contest.id.toString(),
-    name: contest.name,
-    status,
-    date: new Date(contest.startTimeSeconds * 1000 + istOffset),
-    durationTime: Number(contest.durationSeconds),
-    url: `${BASE_URL}/${status === "upcoming" ? "contestRegistration" : "contest"}/${contest.id}` 
-  }));
+  return contests.map((contest) => {
+    const startTime = epochToIST(contest.startTimeSeconds);
+    const endTime = epochToIST(contest.startTimeSeconds + parseInt(contest.durationSeconds));
+
+    return {    
+      id: contest.id.toString(),
+      name: contest.name,
+      status,
+      startTime: startTime,
+      endTime: endTime,
+      durationTime: parseInt(contest.durationSeconds) / 60,
+      url: `${BASE_URL}/${status === "upcoming" ? "contestRegistration" : "contest"}/${contest.id}` 
+    }
+  });
 }
 
 export const fetchContests: () => Promise<Contests | null> = async () => {
@@ -44,7 +49,7 @@ export const fetchContests: () => Promise<Contests | null> = async () => {
       const pastContests: Contest[] = mapContests(past_contests, "completed");
 
       const present_contests = allContests.filter((contest: CodeforcesContest) => contest.phase === "CODING");
-      const presentContests: Contest[] = mapContests(present_contests, "on_going");
+      const presentContests: Contest[] = mapContests(present_contests, "ongoing");
 
       return {
         platform: "codeforces",

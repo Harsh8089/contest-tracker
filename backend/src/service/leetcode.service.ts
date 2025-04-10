@@ -8,6 +8,7 @@ import {
   BASE_URL, 
   CONTEST_URL 
 } from "../utils/leetcode.utils";
+import { epochToIST } from "../utils/date.utils";
 
 export type LeetcodeContest = {
   title: string,
@@ -26,17 +27,22 @@ const contestQuery = `query {
   } 
 }`
 
-const istOffset = 330 * 60 * 1000;
-
 const mapContests = (contests: LeetcodeContest[], status: Status): Contest[] => {
-  return contests.map((contest) => ({
-    id: contest.title,
-    name: contest.title,
-    status,
-    date: new Date(contest.startTime * 1000 + istOffset),
-    durationTime: contest.duration,
-    url: `${BASE_URL}/${contest.title}` 
-  }));
+  return contests.map((contest) => {
+    const startTime = epochToIST(contest.startTime);
+    const endTime = epochToIST(contest.startTime + contest.duration);
+    const url = contest.title.toLowerCase().replace(/ /g, "-");
+
+    return {
+      id: contest.title,
+      name: contest.title,
+      status,
+      startTime: startTime,
+      endTime: endTime,
+      durationTime: contest.duration / 60,
+      url: `${BASE_URL}/contest/${url}` 
+    }
+  });
 }
 
 export const fetchContests =  async (): Promise<Contests | null> => {
@@ -58,7 +64,7 @@ export const fetchContests =  async (): Promise<Contests | null> => {
       const pastContests: Contest[] = mapContests(past_contests, "completed");
 
       return {
-        platform: "codeforces",
+        platform: "leetcode",
         futureContests,
         pastContests,
       }
