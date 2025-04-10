@@ -39,7 +39,7 @@ export default function Navbar() {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  return <header className="sticky top-0 z-10 border-b border-border px-22">
+  return <header className="sticky top-0 z-10 border-b border-border px-22 bg-white">
     <div className="w-full flex items-center justify-between py-4">
       <h1 className="text-xl font-bold">
         Contest Tracker
