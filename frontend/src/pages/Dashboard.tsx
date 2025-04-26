@@ -1,5 +1,7 @@
 import ContestCard from "@/components/ContestCard";
 import FilterBar from "@/components/FilterBar";
+import Header from "@/components/Header";
+
 import {
   Tabs,
   TabsContent,
@@ -11,14 +13,10 @@ import { Status } from "@/types";
 
 const Dashboard = () => {
   return <div className="flex flex-col justify-center px-22 py-5">
-    <div className="flex flex-col items-start w-full">
-      <h1 className="text-3xl font-bold tracking-tight mb-2">
-        Contest Dashboard
-      </h1>
-      <h3 className="text-muted-foreground">
-        Track upcoming and completed programming contests from multiple platforms
-      </h3>
-    </div>
+    <Header 
+      title={"Contest Dashboard"}
+      subTitle={"Track upcoming and completed programming contests from multiple platforms"}
+    />
 
     <FilterBar />
 
