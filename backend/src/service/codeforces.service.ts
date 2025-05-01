@@ -2,13 +2,16 @@ import axios from "axios";
 import { 
   Contest, 
   Contests, 
+  Platform, 
   Status 
 } from "../types/contest";
 import { 
   BASE_URL, 
-  CONTEST_URL 
+  CONTEST_URL, 
+  getContestId
 } from "../utils/codeforces.utils";
 import { epochToIST } from "../utils/date.utils";
+import { getYoutubeURL } from "./youtube.service";
 
 export type CodeforcesContest = {
   id: number,
@@ -43,20 +46,31 @@ export const fetchContests: () => Promise<Contests | null> = async () => {
       const allContests = result.data.result;
 
       const future_contests = allContests.filter((contest: CodeforcesContest) => contest.phase === "BEFORE");
-      const futureContests: Contest[] = mapContests(future_contests, "upcoming");
+      const futureContests: Contest[] = mapContests(future_contests, Status.UPCOMING);
 
       const past_contests = allContests.filter((contest: CodeforcesContest) => contest.phase === "FINISHED");
-      const pastContests: Contest[] = mapContests(past_contests, "completed");
+      const ytUrl = await getYoutubeURL(Platform.CODEFORCES);
+      const pastContests: Contest[] = mapContests(past_contests, Status.COMPLETED).map(contest => {
+        const contestId = getContestId(contest.name.split(" "));
+        if (!contestId) return contest;
+
+        const matchingUrl = ytUrl.find(url => getContestId(url.title.split(" ")) === contestId);
+
+        return {
+          ...contest,
+          ytVideoURL: matchingUrl?.url
+        };
+      });
 
       const present_contests = allContests.filter((contest: CodeforcesContest) => contest.phase === "CODING");
-      const presentContests: Contest[] = mapContests(present_contests, "ongoing");
+      const presentContests: Contest[] = mapContests(present_contests, Status.ONGOING);
 
       return {
-        platform: "codeforces",
+        platform: Platform.CODEFORCES,
         futureContests,
         pastContests,
         presentContests
-      }
+      };
     }
     
   } catch (error) {

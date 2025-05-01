@@ -2,6 +2,7 @@ import axios from "axios";
 import { 
   Contest, 
   Contests, 
+  Platform, 
   Status 
 } from "../types/contest";
 import { 
@@ -12,6 +13,7 @@ import {
   addSecondsToIST, 
   formatDateToIST 
 } from "../utils/date.utils";
+import { getYoutubeURL } from "./youtube.service";
 
 type CodechefContest = {
   contest_code: string,
@@ -32,7 +34,7 @@ const mapContests = (contests: CodechefContest[], status: Status): Contest[] => 
       startTime: formatDateToIST(startDate),
       endTime: formatDateToIST(endDate),
       durationTime: parseInt(contest.contest_duration),
-      url: `${BASE_URL}/${contest.contest_code}`,
+      url: `${BASE_URL}/${contest.contest_code}`,      
     };
   });
 };
@@ -42,18 +44,28 @@ export const fetchContests: () => Promise<Contests | null> = async () => {
     const result = await axios.get(`${CONTEST_URL}`);
 
     if(result.status === 200) {
-      const futureContests: Contest[] = mapContests(result.data.future_contests, "upcoming");
+      const futureContests: Contest[] = mapContests(result.data.future_contests, Status.UPCOMING);
 
-      const pastContests: Contest[] = mapContests(result.data.past_contests, "completed");
+      const ytURL = await getYoutubeURL(Platform.CODECHEF);
+      const pastContests: Contest[] = mapContests(result.data.past_contests, Status.COMPLETED).map(contest => {
+        const getUrl = ytURL.find(url => {
+          return url.title.split(" ").includes(contest.id.replace("START", ""));
+        });
 
-      const presentContests: Contest[] = mapContests(result.data.present_contests, "ongoing");
+        return {
+          ...contest,
+          ytVideoURL: getUrl?.url ?? undefined
+        };
+      });
+
+      const presentContests: Contest[] = mapContests(result.data.present_contests, Status.ONGOING);
 
       return {
-        platform: "codechef",
+        platform: Platform.CODECHEF,
         futureContests,
         pastContests,
         presentContests
-      }
+      };
     }
     
   } catch (error) {
