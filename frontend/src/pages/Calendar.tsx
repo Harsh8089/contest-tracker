@@ -23,7 +23,10 @@ interface RenderCalendarCellProps {
   date?: DateInterface
 }
 
-
+const enum CalendarButton {
+  next = "next",
+  prev = "prev"
+}
 
 const getStartAndEndDateofMonth = (date: Date) => {
   return {
@@ -39,6 +42,22 @@ const getMonthforDate = (date: Date) => {
 const getYearforDate = (date: Date) => {
   return date.getFullYear();
 }
+
+const handleArrowClick = (button: CalendarButton, setDate: React.Dispatch<React.SetStateAction<Date>>) => {
+  const toAdd = (button === CalendarButton.next) ? true : false;
+  
+  setDate(date => {
+    const prevDate = new Date(date);
+    const { startDate, endDate } = getStartAndEndDateofMonth(prevDate);
+    const totalDays: number = Number(endDate.toDateString().split(" ")[2]);
+    if(toAdd) {
+      prevDate.setDate(startDate.getDate() + totalDays);
+    } else {
+      prevDate.setDate(endDate.getDate() - totalDays);
+    }
+    return prevDate;
+  })
+} 
 
 const Calendar = () => {
   const [date, setDate] = useState<Date>(new Date());
@@ -57,7 +76,7 @@ const Calendar = () => {
 
       <FilterBar />
 
-      <div className="">
+      <div>
         <div className="flex justify-between items-center">
           <h1 className="text-xl font-semibold my-6">
             <span className="mr-1">
@@ -76,25 +95,13 @@ const Calendar = () => {
             </Button>
             <Button
               variant={"outline"}
-              onClick={() => {
-                setDate(date => {
-                  const prevDate = new Date(date);
-                  prevDate.setDate(prevDate.getDate() - totalDays);
-                  return prevDate;
-                })
-              }}
+              onClick={() => handleArrowClick(CalendarButton.prev, setDate)}
             >
               <ChevronLeft />
             </Button>
             <Button
               variant={"outline"}
-              onClick={() => {
-                setDate(date => {
-                  const prevDate = new Date(date);
-                  prevDate.setDate(prevDate.getDate() + totalDays);
-                  return prevDate;
-                })
-              }}
+              onClick={() => handleArrowClick(CalendarButton.next, setDate)}
             >
               <ChevronRight />
             </Button>
