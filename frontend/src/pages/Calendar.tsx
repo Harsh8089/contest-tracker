@@ -10,7 +10,9 @@ import {
   ChevronRight 
 } 
 from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { contests } from "@/mock-data/contests";
+import { Contest, ContestPlatform } from "@/types";
 
 interface DateInterface {
   month: number,
@@ -20,7 +22,8 @@ interface DateInterface {
 interface RenderCalendarCellProps {
   length: number,
   base?: number,
-  date?: DateInterface
+  date?: DateInterface,
+  contest?: Contest[]
 }
 
 const enum CalendarButton {
@@ -59,6 +62,13 @@ const handleArrowClick = (button: CalendarButton, setDate: React.Dispatch<React.
   })
 } 
 
+const getContest = (month: number, year: number) => {
+  return contests.filter(contest => {
+    const contestDate = new Date(contest.startTime);
+    if(contestDate.getMonth() === month && contestDate.getFullYear() === year) return contest; 
+  })
+} 
+
 const Calendar = () => {
   const [date, setDate] = useState<Date>(new Date());
 
@@ -66,6 +76,8 @@ const Calendar = () => {
   const skipDays = startDate.getDay();
   const totalDays: number = Number(endDate.toDateString().split(" ")[2]);
   const totalRows = 1 + Math.ceil((totalDays - (7 - skipDays)) / 7);
+
+  const filterContest = useMemo(() => getContest(startDate.getMonth(), startDate.getFullYear()), [date]);  
 
   return (
     <div className="flex flex-col justify-center px-22 py-5">
@@ -121,13 +133,26 @@ const Calendar = () => {
 
         {/* For 1st row - skip and actual */}
         <div className="grid grid-cols-7">
-          {<RenderCalendarCell length={skipDays} />}
-          {<RenderCalendarCell length={7 - skipDays} base={1} date={{ month: date.getMonth(), year: date.getFullYear() }} />}
+          {<RenderCalendarCell 
+            length={skipDays} 
+          />}
+          {<RenderCalendarCell 
+            length={7 - skipDays} 
+            base={1} 
+            date={{ month: date.getMonth(), year: date.getFullYear() }} 
+            contest={filterContest} 
+          />}
         </div>
 
         {/* For middle rows */}
         <div className={`grid grid-row-${totalRows - 2} grid-cols-7`}>
-          {<RenderCalendarCell length={7 * (totalRows - 2)} base={1 + (7 - skipDays)} date={{ month: date.getMonth(), year: date.getFullYear() }} />}
+          {<RenderCalendarCell 
+            length={7 * (totalRows - 2)} 
+            base={1 + (7 - skipDays)} 
+            date={{ month: date.getMonth(), 
+            year: date.getFullYear() }} 
+            contest={filterContest} 
+          />}
         </div>
 
         {/* For last row */}
@@ -136,6 +161,7 @@ const Calendar = () => {
             length={totalDays - (7 - skipDays + 7 * (totalRows - 2))} 
             base={1 + (7 - skipDays) + 7 * (totalRows - 2)} 
             date={{ month: date.getMonth(), year: date.getFullYear() }}
+            contest={filterContest}
           />}
           {<RenderCalendarCell 
             length={7 - (totalDays - (7 - skipDays + 7 * (totalRows - 2)))}
@@ -150,7 +176,8 @@ const Calendar = () => {
 const RenderCalendarCell = ({
   length,
   base,
-  date
+  date,
+  contest
 }: RenderCalendarCellProps) => {
   return <>
     {Array.from({ length }, (_, index) => {
@@ -158,7 +185,7 @@ const RenderCalendarCell = ({
       
       const day = index + base;
 
-      return <FilledCell key={index} day={day} date={date}/>
+      return <FilledCell key={index} day={day} date={date} contest={contest!} />
     })}
   </>
 }
@@ -169,19 +196,41 @@ const EmptyCell = () => {
 
 const FilledCell = ({
   day,
-  date
+  date,
+  contest
 }: {
   day: number,
-  date: DateInterface
+  date: DateInterface,
+  contest: Contest[]
 }) => {
-  const [today, month, year] = [new Date().getDate(), new Date().getMonth(), new Date().getFullYear()];
+  const today = new Date();
+  const isToday = today.getDate() === day && today.getMonth() === date.month && today.getFullYear() === date.year;
 
-  return <div 
-  className={`${today === day && month === date.month && year === date.year ? "bg-gray-300" : "bg-gray-100"} h-20 w-full p-3 border-r border-b text-sm font-semibold`}
->
-  { day }
-</div>
-}
+  const contestIndicators = useMemo(() => {
+    const platforms = [ContestPlatform.LEETCODE, ContestPlatform.CODECHEF, ContestPlatform.CODEFORCES];
+    const colors = {
+      [ContestPlatform.LEETCODE]: "bg-orange-600",
+      [ContestPlatform.CODECHEF]: "bg-blue-600",
+      [ContestPlatform.CODEFORCES]: "bg-rose-950",
+    };
+
+    return platforms
+      .filter(platform => contest.some(c => c.platform === platform && new Date(c.startTime).getDate() === day))
+      .map(platform => <div key={platform} className={`${colors[platform]} w-2 h-2 rounded-full`} />);
+  }, [contest, day]);
+
+  return (
+    <div
+      onClick={() => {}}
+      className={`${
+        isToday ? "bg-gray-300" : "bg-gray-100"
+      } h-20 w-full p-3 border-r border-b text-sm font-semibold flex flex-col justify-between`}
+    >
+      <div>{day}</div>
+      <div className="flex gap-1 items-center">{contestIndicators}</div>
+    </div>
+  );
+};
 
 
 export default Calendar
