@@ -14,10 +14,11 @@ export enum Status {
 export type Contest = {
   id: string,
   name: string,
-  platform: ContestPlatform,
-  status: Status,
+  platform: 'codechef' | 'codeforces' | 'leetcode',
+  status: 'ongoing' | 'upcoming' | 'completed',
   startTime: string,
   endTime: string,
   durationTime: number,
-  url: string
+  url: string,
+  ytVideoURL?: string
 }
