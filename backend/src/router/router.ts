@@ -8,6 +8,7 @@ import {
 import { 
   fetchContests as leetcodeContests 
 } from "../service/leetcode.service";
+import { Contest } from "../types/contest";
 
 const router = express.Router();
 
@@ -23,15 +24,30 @@ const sendErrorResponse = (res: Response, message: string, statusCode: number = 
 router.get("/all/contests", async (req: Request, res: Response): Promise<void> => {
   try {
     const contestDetails = await Promise.allSettled([codechefContests(), codeforcesContests(), leetcodeContests()]);
-
+    
     const fulfilledDetails = contestDetails.filter(contest => contest.status === 'fulfilled');
+    const pastContests = [], presentContests = [], futureContests = [];
+
+    for(const { value } of fulfilledDetails) {
+      if(value?.pastContests) pastContests.push(...value.pastContests);
+      if(value?.presentContests) presentContests.push(...value.presentContests);
+      if(value?.futureContests) futureContests.push(...value.futureContests);
+    }
+
+    const sortByStartTime = (a: Contest, b: Contest) => new Date(a?.startTime || 0).getTime() - new Date(b?.startTime || 0).getTime();
+
+    pastContests.sort(sortByStartTime);
+    presentContests.sort(sortByStartTime);
+    futureContests.sort(sortByStartTime);
+
+    const allContests = [...pastContests, ...presentContests, ...futureContests];
 
     if(!fulfilledDetails.length) {
       sendErrorResponse(res, "Something went wrong", 404);
       return;
     }
 
-    sendSuccessResponse(res, fulfilledDetails, 200);
+    sendSuccessResponse(res, allContests, 200);
   } catch (error) {
     sendErrorResponse(res, "Internal Server Error");
   }

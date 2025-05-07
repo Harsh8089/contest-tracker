@@ -28,6 +28,7 @@ const mapContests = (contests: CodeforcesContest[], status: Status): Contest[] =
 
     return {    
       id: contest.id.toString(),
+      platform: Platform.CODEFORCES,
       name: contest.name,
       status,
       startTime: startTime,
@@ -48,7 +49,7 @@ export const fetchContests: () => Promise<Contests | null> = async () => {
       const future_contests = allContests.filter((contest: CodeforcesContest) => contest.phase === "BEFORE");
       const futureContests: Contest[] = mapContests(future_contests, Status.UPCOMING);
 
-      const past_contests = allContests.filter((contest: CodeforcesContest) => contest.phase === "FINISHED");
+      const past_contests = allContests.filter((contest: CodeforcesContest) => contest.phase === "FINISHED").splice(0, 10);
       const ytUrl = await getYoutubeURL(Platform.CODEFORCES);
       const pastContests: Contest[] = mapContests(past_contests, Status.COMPLETED).map(contest => {
         const contestId = getContestId(contest.name.split(" "));

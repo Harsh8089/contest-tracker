@@ -1,5 +1,6 @@
 export type Contest = {
   id: string,
+  platform: Platform,
   name: string,
   status: Status,
   startTime: string,

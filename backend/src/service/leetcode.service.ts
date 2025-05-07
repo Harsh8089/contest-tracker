@@ -37,6 +37,7 @@ const mapContests = (contests: LeetcodeContest[], status: Status): Contest[] => 
 
     return {
       id: contest.title,
+      platform: Platform.LEETCODE,
       name: contest.title,
       status,
       startTime: startTime,
@@ -63,7 +64,7 @@ export const fetchContests =  async (): Promise<Contests | null> => {
       const futureContests: Contest[] = mapContests(future_contests, Status.UPCOMING);
 
       const ytURL = await getYoutubeURL(Platform.LEETCODE);
-      const past_contests = allContests.filter((contest: LeetcodeContest) => contest.startTime * 1000 < new Date().getTime());
+      const past_contests = allContests.filter((contest: LeetcodeContest) => contest.startTime * 1000 < new Date().getTime()).splice(0, 10);
       const pastContests: Contest[] = mapContests(past_contests, Status.COMPLETED).map(contest => {
         const getUrl = ytURL.find(url => {
           return url.title.split(" ").includes(contest.id.split(" ").at(-1));

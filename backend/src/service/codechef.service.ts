@@ -29,6 +29,7 @@ const mapContests = (contests: CodechefContest[], status: Status): Contest[] => 
     
     return {
       id: contest.contest_code,
+      platform: Platform.CODECHEF,
       name: contest.contest_name,
       status,
       startTime: formatDateToIST(startDate),
@@ -47,7 +48,7 @@ export const fetchContests: () => Promise<Contests | null> = async () => {
       const futureContests: Contest[] = mapContests(result.data.future_contests, Status.UPCOMING);
 
       const ytURL = await getYoutubeURL(Platform.CODECHEF);
-      const pastContests: Contest[] = mapContests(result.data.past_contests, Status.COMPLETED).map(contest => {
+      const pastContests: Contest[] = mapContests(result.data.past_contests, Status.COMPLETED).splice(0, 10).map(contest => {
         const getUrl = ytURL.find(url => {
           return url.title.split(" ").includes(contest.id.replace("START", ""));
         });
