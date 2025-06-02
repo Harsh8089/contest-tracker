@@ -8,10 +8,13 @@ import {
   TabsList,
   TabsTrigger
 } from "@/components/ui/tabs";
-import { contests } from "@/mock-data/contests";
+import { useContest } from "@/hooks/useContest";
+// import { contests } from "@/mock-data/contests";
 import { Status } from "@/types";
 
 const Dashboard = () => {
+  const { data: contests } = useContest();
+
   return <div className="flex flex-col justify-center px-22 py-5">
     <Header 
       title={"Contest Dashboard"}

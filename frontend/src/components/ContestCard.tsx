@@ -1,5 +1,5 @@
 import { Contest, ContestPlatform, Status } from "@/types"
-import { Bookmark, Calendar, Clock, ExternalLink } from "lucide-react";
+import { Bookmark, Calendar, Clock, ExternalLink, Youtube } from "lucide-react";
 
 interface ContestCardProps {
   contest: Contest;
@@ -103,11 +103,24 @@ const ContestCard: React.FC<ContestCardProps> = ({
           </div>
         </div>
       </main>
-      <footer className="flex items-center gap-2 mt-2 text-blue-500">
-        <ExternalLink className="h-4 w-4"/>
-        <p className="text-sm">
-          Visit Contest
-        </p>
+      <footer className="flex items-center justify-between mt-2">
+        <div className="flex items-center gap-2 text-blue-500">
+          <ExternalLink className="h-4 w-4"/>
+          <p className="text-sm">
+            Visit Contest
+          </p>
+        </div>
+        {contest.ytVideoURL && <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            window.open(contest.ytVideoURL, "_blank")
+          }}
+          className="flex items-center gap-2 text-red-500 cursor-pointer hover:bg-gray-100 transition-all duration-300 p-2 rounded-md">
+          <Youtube className="h-4 w-4"/>
+          <p className="text-sm">
+            PCD
+          </p>
+        </button>}
       </footer>
     </div>
   )

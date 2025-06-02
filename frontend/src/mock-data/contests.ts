@@ -1,11 +1,12 @@
 import { 
   Contest,
+  ContestPlatform,
 } from "@/types";
 
 export const contests: Contest[] = [
   {
       id: "START175",
-      platform: "codechef",
+      platform: ContestPlatform.CODECHEF,
       name: "Starters 175 (Rated till 5 stars)",
       status: "completed",
       startTime: "26 Feb 2025, 8:00 pm",
@@ -16,7 +17,7 @@ export const contests: Contest[] = [
   },
   {
       id: "START176",
-      platform: "codechef",
+      platform: ContestPlatform.CODECHEF,
       name: "Starters 176 (Rated till 4 star)",
       status: "completed",
       startTime: "5 Mar 2025, 8:00 pm",
@@ -27,7 +28,7 @@ export const contests: Contest[] = [
   },
   {
       id: "START177",
-      platform: "codechef",
+      platform: ContestPlatform.CODECHEF,
       name: "Starters 177 (Rated till 5 star)",
       status: "completed",
       startTime: "12 Mar 2025, 8:00 pm",
@@ -38,7 +39,7 @@ export const contests: Contest[] = [
   },
   {
       id: "START178",
-      platform: "codechef",
+      platform: ContestPlatform.CODECHEF,
       name: "Starters 178 (Rated till 6 star)",
       status: "completed",
       startTime: "19 Mar 2025, 8:00 pm",
@@ -49,7 +50,7 @@ export const contests: Contest[] = [
   },
   {
       id: "Weekly Contest 442",
-      platform: "leetcode",
+      platform: ContestPlatform.LEETCODE,
       name: "Weekly Contest 442",
       status: "completed",
       startTime: "23 Mar 2025, 8:00 am",
@@ -60,7 +61,7 @@ export const contests: Contest[] = [
   },
   {
       id: "START179",
-      platform: "codechef",
+      platform: ContestPlatform.CODECHEF,
       name: "Starters 179 (Rated till 5 star)",
       status: "completed",
       startTime: "26 Mar 2025, 8:00 pm",
@@ -71,7 +72,7 @@ export const contests: Contest[] = [
   },
   {
       id: "Biweekly Contest 153",
-      platform: "leetcode",
+      platform: ContestPlatform.LEETCODE,
       name: "Biweekly Contest 153",
       status: "completed",
       startTime: "29 Mar 2025, 8:00 pm",
@@ -81,7 +82,7 @@ export const contests: Contest[] = [
   },
   {
       id: "Weekly Contest 443",
-      platform: "leetcode",
+      platform: ContestPlatform.LEETCODE,
       name: "Weekly Contest 443",
       status: "completed",
       startTime: "30 Mar 2025, 8:00 am",
@@ -92,7 +93,7 @@ export const contests: Contest[] = [
   },
   {
       id: "START180",
-      platform: "codechef",
+      platform: ContestPlatform.CODECHEF,
       name: "Starters 180 (Rated till 6 star)",
       status: "completed",
       startTime: "2 Apr 2025, 8:00 pm",
@@ -103,7 +104,7 @@ export const contests: Contest[] = [
   },
   {
       id: "Weekly Contest 444",
-      platform: "leetcode",
+      platform: ContestPlatform.LEETCODE,
       name: "Weekly Contest 444",
       status: "completed",
       startTime: "6 Apr 2025, 8:00 am",
@@ -114,7 +115,7 @@ export const contests: Contest[] = [
   },
   {
       id: "START181",
-      platform: "codechef",
+      platform: ContestPlatform.CODECHEF,
       name: "Starters 181 (Rated for all)",
       status: "completed",
       startTime: "9 Apr 2025, 8:00 pm",
@@ -125,7 +126,7 @@ export const contests: Contest[] = [
   },
   {
       id: "Biweekly Contest 154",
-      platform: "leetcode",
+      platform: ContestPlatform.LEETCODE,
       name: "Biweekly Contest 154",
       status: "completed",
       startTime: "12 Apr 2025, 8:00 pm",
@@ -136,7 +137,7 @@ export const contests: Contest[] = [
   },
   {
       id: "Weekly Contest 445",
-      platform: "leetcode",
+      platform: ContestPlatform.LEETCODE,
       name: "Weekly Contest 445",
       status: "completed",
       startTime: "13 Apr 2025, 8:00 am",
@@ -147,7 +148,7 @@ export const contests: Contest[] = [
   },
   {
       id: "2094",
-      platform: "codeforces",
+      platform: ContestPlatform.CODEFORCES,
       name: "Codeforces Round 1017 (Div. 4)",
       status: "completed",
       startTime: "13 Apr 2025, 9:05 pm",
@@ -158,7 +159,7 @@ export const contests: Contest[] = [
   },
   {
       id: "START182",
-      platform: "codechef",
+      platform: ContestPlatform.CODECHEF,
       name: "Starters 182 (Rated till 5 star)",
       status: "completed",
       startTime: "16 Apr 2025, 8:00 pm",
@@ -169,7 +170,7 @@ export const contests: Contest[] = [
   },
   {
       id: "2096",
-      platform: "codeforces",
+      platform: ContestPlatform.CODEFORCES,
       name: "Neowise Labs Contest 1 (Codeforces Round 1018, Div. 1 + Div. 2)",
       status: "completed",
       startTime: "19 Apr 2025, 8:05 pm",
@@ -179,7 +180,7 @@ export const contests: Contest[] = [
   },
   {
       id: "Weekly Contest 446",
-      platform: "leetcode",
+      platform: ContestPlatform.LEETCODE,
       name: "Weekly Contest 446",
       status: "completed",
       startTime: "20 Apr 2025, 8:00 am",
@@ -190,7 +191,7 @@ export const contests: Contest[] = [
   },
   {
       id: "2105",
-      platform: "codeforces",
+      platform: ContestPlatform.CODEFORCES,
       name: "Tact Smart Battle 1",
       status: "completed",
       startTime: "21 Apr 2025, 2:30 pm",
@@ -200,7 +201,7 @@ export const contests: Contest[] = [
   },
   {
       id: "2103",
-      platform: "codeforces",
+      platform: ContestPlatform.CODEFORCES,
       name: "Codeforces Round 1019 (Div. 2)",
       status: "completed",
       startTime: "21 Apr 2025, 8:05 pm",
@@ -211,7 +212,7 @@ export const contests: Contest[] = [
   },
   {
       id: "START183",
-      platform: "codechef",
+      platform: ContestPlatform.CODECHEF,
       name: "Starters 183 (Rated till 6 star)",
       status: "completed",
       startTime: "23 Apr 2025, 8:00 pm",
@@ -222,7 +223,7 @@ export const contests: Contest[] = [
   },
   {
       id: "2106",
-      platform: "codeforces",
+      platform: ContestPlatform.CODEFORCES,
       name: "Codeforces Round 1020 (Div. 3)",
       status: "completed",
       startTime: "24 Apr 2025, 8:05 pm",
@@ -233,7 +234,7 @@ export const contests: Contest[] = [
   },
   {
       id: "2097",
-      platform: "codeforces",
+      platform: ContestPlatform.CODEFORCES,
       name: "Codeforces Round 1021 (Div. 1)",
       status: "completed",
       startTime: "26 Apr 2025, 2:05 pm",
@@ -244,7 +245,7 @@ export const contests: Contest[] = [
   },
   {
       id: "2098",
-      platform: "codeforces",
+      platform: ContestPlatform.CODEFORCES,
       name: "Codeforces Round 1021 (Div. 2)",
       status: "completed",
       startTime: "26 Apr 2025, 2:05 pm",
@@ -255,7 +256,7 @@ export const contests: Contest[] = [
   },
   {
       id: "Biweekly Contest 155",
-      platform: "leetcode",
+      platform: ContestPlatform.LEETCODE,
       name: "Biweekly Contest 155",
       status: "completed",
       startTime: "26 Apr 2025, 8:00 pm",
@@ -266,7 +267,7 @@ export const contests: Contest[] = [
   },
   {
       id: "Weekly Contest 447",
-      platform: "leetcode",
+      platform: ContestPlatform.LEETCODE,
       name: "Weekly Contest 447",
       status: "completed",
       startTime: "27 Apr 2025, 8:00 am",
@@ -277,7 +278,7 @@ export const contests: Contest[] = [
   },
   {
       id: "2104",
-      platform: "codeforces",
+      platform: ContestPlatform.CODEFORCES,
       name: "Educational Codeforces Round 178 (Rated for Div. 2)",
       status: "completed",
       startTime: "28 Apr 2025, 8:05 pm",
@@ -288,7 +289,7 @@ export const contests: Contest[] = [
   },
   {
       id: "START184",
-      platform: "codechef",
+      platform: ContestPlatform.CODECHEF,
       name: "Starters 184 (Rated till 5 star)",
       status: "completed",
       startTime: "30 Apr 2025, 8:00 pm",
@@ -299,7 +300,7 @@ export const contests: Contest[] = [
   },
   {
       id: "2108",
-      platform: "codeforces",
+      platform: ContestPlatform.CODEFORCES,
       name: "Codeforces Round 1022 (Div. 2)",
       status: "completed",
       startTime: "1 May 2025, 8:05 pm",
@@ -310,7 +311,7 @@ export const contests: Contest[] = [
   },
   {
       id: "Weekly Contest 448",
-      platform: "leetcode",
+      platform: ContestPlatform.LEETCODE,
       name: "Weekly Contest 448",
       status: "completed",
       startTime: "4 May 2025, 8:00 am",
@@ -321,7 +322,7 @@ export const contests: Contest[] = [
   },
   {
       id: "2107",
-      platform: "codeforces",
+      platform: ContestPlatform.CODEFORCES,
       name: "Codeforces Round 1023 (Div. 2)",
       status: "completed",
       startTime: "5 May 2025, 8:05 pm",
@@ -332,7 +333,7 @@ export const contests: Contest[] = [
   },
   {
       id: "START185",
-      platform: "codechef",
+      platform: ContestPlatform.CODECHEF,
       name: "Starters 185 (Rated till 5 star)",
       status: "ongoing",
       startTime: "7 May 2025, 8:00 pm",
@@ -342,7 +343,7 @@ export const contests: Contest[] = [
   },
   {
       id: "Biweekly Contest 156",
-      platform: "leetcode",
+      platform: ContestPlatform.LEETCODE,
       name: "Biweekly Contest 156",
       status: "upcoming",
       startTime: "10 May 2025, 8:00 pm",
@@ -352,7 +353,7 @@ export const contests: Contest[] = [
   },
   {
       id: "Weekly Contest 449",
-      platform: "leetcode",
+      platform: ContestPlatform.LEETCODE,
       name: "Weekly Contest 449",
       status: "upcoming",
       startTime: "11 May 2025, 8:00 am",
@@ -362,7 +363,7 @@ export const contests: Contest[] = [
   },
   {
       id: "2101",
-      platform: "codeforces",
+      platform: ContestPlatform.CODEFORCES,
       name: "Codeforces Round 1024 (Div. 1)",
       status: "upcoming",
       startTime: "11 May 2025, 8:05 pm",
@@ -372,7 +373,7 @@ export const contests: Contest[] = [
   },
   {
       id: "2102",
-      platform: "codeforces",
+      platform: ContestPlatform.CODEFORCES,
       name: "Codeforces Round 1024 (Div. 2)",
       status: "upcoming",
       startTime: "11 May 2025, 8:05 pm",
@@ -382,7 +383,7 @@ export const contests: Contest[] = [
   },
   {
       id: "START186",
-      platform: "codechef",
+      platform: ContestPlatform.CODECHEF,
       name: "Starters 186",
       status: "upcoming",
       startTime: "14 May 2025, 8:00 pm",
@@ -392,7 +393,7 @@ export const contests: Contest[] = [
   },
   {
       id: "START187",
-      platform: "codechef",
+      platform: ContestPlatform.CODECHEF,
       name: "Starters 187",
       status: "upcoming",
       startTime: "21 May 2025, 8:00 pm",

@@ -11,8 +11,9 @@ import {
 } 
 from "lucide-react";
 import { useMemo, useState } from "react";
-import { contests } from "@/mock-data/contests";
+// import { contests } from "@/mock-data/contests";
 import { Contest, ContestPlatform } from "@/types";
+import { useContest } from "@/hooks/useContest";
 
 interface DateInterface {
   month: number,
@@ -62,7 +63,7 @@ const handleArrowClick = (button: CalendarButton, setDate: React.Dispatch<React.
   })
 } 
 
-const getContest = (month: number, year: number) => {
+const getContest = (contests: Contest[], month: number, year: number) => {
   return contests.filter(contest => {
     const contestDate = new Date(contest.startTime);
     if(contestDate.getMonth() === month && contestDate.getFullYear() === year) return contest; 
@@ -70,6 +71,8 @@ const getContest = (month: number, year: number) => {
 } 
 
 const Calendar = () => {
+  const { data: contests } = useContest();
+
   const [date, setDate] = useState<Date>(new Date());
 
   const { startDate, endDate } = getStartAndEndDateofMonth(date);
@@ -77,7 +80,10 @@ const Calendar = () => {
   const totalDays: number = Number(endDate.toDateString().split(" ")[2]);
   const totalRows = 1 + Math.ceil((totalDays - (7 - skipDays)) / 7);
 
-  const filterContest = useMemo(() => getContest(startDate.getMonth(), startDate.getFullYear()), [date]);  
+  const filterContest = useMemo(() => 
+    getContest(contests, startDate.getMonth(), startDate.getFullYear()), 
+    [date, contests]
+  );  
 
   return (
     <div className="flex flex-col justify-center px-22 py-5">
@@ -88,87 +94,89 @@ const Calendar = () => {
 
       <FilterBar />
 
-      <div>
-        <div className="flex justify-between items-center">
-          <h1 className="text-xl font-semibold my-6">
-            <span className="mr-1">
-              { getMonthforDate(startDate) }
-            </span>
-            <span>
-              { getYearforDate(startDate) }
-            </span>
-          </h1>
-          <div className="flex gap-2 items-center">
-            <Button
-              variant={"outline"}
-              onClick={() => { setDate(new Date()) }}
-            >
-              Today
-            </Button>
-            <Button
-              variant={"outline"}
-              onClick={() => handleArrowClick(CalendarButton.prev, setDate)}
-            >
-              <ChevronLeft />
-            </Button>
-            <Button
-              variant={"outline"}
-              onClick={() => handleArrowClick(CalendarButton.next, setDate)}
-            >
-              <ChevronRight />
-            </Button>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-7">
-          {days.map((day, index) => (
-            <div
-              key={index}
-              className={`py-2 text-center border-r border-b text-sm font-semibold bg-gray-50`}
-            >
-              {day}
+      {contests.length ? <div>
+          <div className="flex justify-between items-center">
+            <h1 className="text-xl font-semibold my-6">
+              <span className="mr-1">
+                { getMonthforDate(startDate) }
+              </span>
+              <span>
+                { getYearforDate(startDate) }
+              </span>
+            </h1>
+            <div className="flex gap-2 items-center">
+              <Button
+                variant={"outline"}
+                onClick={() => { setDate(new Date()) }}
+              >
+                Today
+              </Button>
+              <Button
+                variant={"outline"}
+                onClick={() => handleArrowClick(CalendarButton.prev, setDate)}
+              >
+                <ChevronLeft />
+              </Button>
+              <Button
+                variant={"outline"}
+                onClick={() => handleArrowClick(CalendarButton.next, setDate)}
+              >
+                <ChevronRight />
+              </Button>
             </div>
-          ))}
-        </div>
+          </div>
 
-        {/* For 1st row - skip and actual */}
-        <div className="grid grid-cols-7">
-          {<RenderCalendarCell 
-            length={skipDays} 
-          />}
-          {<RenderCalendarCell 
-            length={7 - skipDays} 
-            base={1} 
-            date={{ month: date.getMonth(), year: date.getFullYear() }} 
-            contest={filterContest} 
-          />}
-        </div>
+          <div className="grid grid-cols-7">
+            {days.map((day, index) => (
+              <div
+                key={index}
+                className={`py-2 text-center border-r border-b text-sm font-semibold bg-gray-50`}
+              >
+                {day}
+              </div>
+            ))}
+          </div>
 
-        {/* For middle rows */}
-        <div className={`grid grid-row-${totalRows - 2} grid-cols-7`}>
-          {<RenderCalendarCell 
-            length={7 * (totalRows - 2)} 
-            base={1 + (7 - skipDays)} 
-            date={{ month: date.getMonth(), 
-            year: date.getFullYear() }} 
-            contest={filterContest} 
-          />}
-        </div>
+          {/* For 1st row - skip and actual */}
+          <div className="grid grid-cols-7">
+            {<RenderCalendarCell 
+              length={skipDays} 
+            />}
+            {<RenderCalendarCell 
+              length={7 - skipDays} 
+              base={1} 
+              date={{ month: date.getMonth(), year: date.getFullYear() }} 
+              contest={filterContest} 
+            />}
+          </div>
 
-        {/* For last row */}
-        <div className="grid grid-cols-7">
-          {<RenderCalendarCell 
-            length={totalDays - (7 - skipDays + 7 * (totalRows - 2))} 
-            base={1 + (7 - skipDays) + 7 * (totalRows - 2)} 
-            date={{ month: date.getMonth(), year: date.getFullYear() }}
-            contest={filterContest}
-          />}
-          {<RenderCalendarCell 
-            length={7 - (totalDays - (7 - skipDays + 7 * (totalRows - 2)))}
-            date={{ month: date.getMonth(), year: date.getFullYear() }} 
-          />}
-        </div>
-      </div>
+          {/* For middle rows */}
+          <div className={`grid grid-row-${totalRows - 2} grid-cols-7`}>
+            {<RenderCalendarCell 
+              length={7 * (totalRows - 2)} 
+              base={1 + (7 - skipDays)} 
+              date={{ month: date.getMonth(), 
+              year: date.getFullYear() }} 
+              contest={filterContest} 
+            />}
+          </div>
+
+          {/* For last row */}
+          <div className="grid grid-cols-7">
+            {<RenderCalendarCell 
+              length={totalDays - (7 - skipDays + 7 * (totalRows - 2))} 
+              base={1 + (7 - skipDays) + 7 * (totalRows - 2)} 
+              date={{ month: date.getMonth(), year: date.getFullYear() }}
+              contest={filterContest}
+            />}
+            {<RenderCalendarCell 
+              length={7 - (totalDays - (7 - skipDays + 7 * (totalRows - 2)))}
+              date={{ month: date.getMonth(), year: date.getFullYear() }} 
+            />}
+          </div>
+        </div> : 
+        null 
+      }
     </div>
   )
 }

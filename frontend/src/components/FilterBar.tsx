@@ -16,10 +16,14 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
+import { useContest } from "@/hooks/useContest"
+import { ContestPlatform } from "@/types"
 import { Bookmark, Filter, Search } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const FilterBar = () => {
+  const { setFilter } = useContest();
+
   const [filters, setFilters] = useState([
     { platform: "Codechef", checked: true },
     { platform: "Codeforces", checked: true },
@@ -42,6 +46,15 @@ const FilterBar = () => {
       });
     });
   }
+
+  useEffect(() => {
+    setFilter(prev => ({
+      ...prev,
+      platform: filters
+      .filter(p => p.checked)
+      .map(p => p.platform.toLowerCase() as ContestPlatform)
+    }))
+  }, [filters]);
 
   return <div className="w-full flex items-center justify-between space-x-4 p-4 glass-panel my-5">
     <div className="relative flex-10">
