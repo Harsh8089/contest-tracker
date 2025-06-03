@@ -44,7 +44,9 @@ export const ContestProvider = ({
   const [data, setData] = useState<Contest[]>([]);
   const [loader, setLoader] = useState<boolean>(true);
 
-  let allContestsRef = useRef<Contest[]>([]);
+  const prevFilterRef = useRef<Filter>(null);
+  const allContestsRef = useRef<Contest[]>([]);
+  const timeoutRef = useRef<any>(null);
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/v1/all/contests')
@@ -61,11 +63,35 @@ export const ContestProvider = ({
   }, []);
 
   useEffect(() => {
-    const filteredContests = allContestsRef
-                            .current
-                            .filter(contest => filter.platform.includes(contest.platform));
+    if (!prevFilterRef.current) {
+      setData(allContestsRef.current);
+      prevFilterRef.current = filter;
+      return;
+    }
 
-    setData(filteredContests);
+    clearTimeout(timeoutRef.current);
+
+    // added debounce logic for searchContest input field.
+    timeoutRef.current = setTimeout(() => {
+      const filteredContests = allContestsRef.current.filter(contest => {
+        const matchesSearch = contest.name
+          .toLowerCase()
+          .includes(filter.searchContest.toLowerCase());
+
+        const matchesPlatform = filter.platform.includes(contest.platform);
+
+        const matchesTimeFrame = filter.timeFrame === contest.status;
+
+        return matchesSearch && matchesPlatform && matchesTimeFrame;
+      });
+
+      setData(filteredContests);
+      prevFilterRef.current = filter;
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeoutRef.current);
+    };
   }, [filter]);
 
   return <ContestContext.Provider value={{ filter, setFilter, data, loader }}>

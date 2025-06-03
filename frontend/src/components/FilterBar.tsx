@@ -17,12 +17,12 @@ import {
   SelectValue
 } from "@/components/ui/select"
 import { useContest } from "@/hooks/useContest"
-import { ContestPlatform } from "@/types"
+import { ContestPlatform, Status } from "@/types"
 import { Bookmark, Filter, Search } from "lucide-react"
 import { useEffect, useState } from "react"
 
 const FilterBar = () => {
-  const { setFilter } = useContest();
+  const { setFilter, filter: { searchContest } } = useContest();
 
   const [filters, setFilters] = useState([
     { platform: "Codechef", checked: true },
@@ -63,26 +63,40 @@ const FilterBar = () => {
         type="text"
         className="pl-9 pr-8 focus:border-black focus:border-2"
         placeholder="Search contests..."
+        value={searchContest}
+        onChange={(e) => {
+          setFilter(prev => ({
+            ...prev,
+            searchContest: e.target.value
+          }));
+        }}
       />
     </div>
 
     <div className="flex-10">
-      <Select>
+      <Select
+        onValueChange={(value: Status) => {
+          setFilter(prev => ({
+            ...prev,
+            timeFrame: value
+          }));
+        }}
+      >
         <SelectTrigger className="focus-visible:ring-0 focus-visible:ring-offset-0 w-full">
           <SelectValue placeholder="Select time frame" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup className="bg-white">
-            <SelectItem value="all">
+            <SelectItem value={Status.ALL}>
               All Contests
             </SelectItem>
-            <SelectItem value="upcoming">
+            <SelectItem value={Status.UPCOMING}>
               Upcoming Contests
             </SelectItem>
-            <SelectItem value="ongoing">
+            <SelectItem value={Status.ONGOING}>
               Ongoing Contests
             </SelectItem>
-            <SelectItem value="past">
+            <SelectItem value={Status.COMPLETED}>
               Past Contests
             </SelectItem>
           </SelectGroup>
