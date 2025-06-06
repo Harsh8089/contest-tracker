@@ -15,7 +15,7 @@ export type Contest = {
   id: string,
   name: string,
   platform: ContestPlatform,
-  status: 'ongoing' | 'upcoming' | 'completed',
+  status: Exclude<Status, Status.ALL>,
   startTime: string,
   endTime: string,
   durationTime: number,

@@ -5,13 +5,12 @@ import {
   useRef, 
   useState 
 } from "react";
-import axios from "axios";
 import { 
-  Contest,
   ContestPlatform, 
   Filter, 
   Status 
 } from "@/types";
+import { useFetch } from "@/hooks/useFetch";
 
 const defaultFilterState: Filter = {
   searchContest: "",
@@ -41,33 +40,30 @@ export const ContestProvider = ({
   children: ReactNode
 }) => {
   const [filter, setFilter] = useState<Filter>(defaultFilterState);
-  const [data, setData] = useState<Contest[]>([]);
-  const [loader, setLoader] = useState<boolean>(true);
 
   const prevFilterRef = useRef<Filter>(null);
-  const allContestsRef = useRef<Contest[]>([]);
   const timeoutRef = useRef<any>(null);
 
-  useEffect(() => {
-    axios.get('http://localhost:8000/api/v1/all/contests')
-    .then(res => {
-      allContestsRef.current = res.data;
-      setData(res.data);
-    })
-    .catch(err => {
-      console.log(err);
-    })
-    .finally(() => {
-      setLoader(true);
-    })
-  }, []);
+  const {
+    allContestsRef,
+    data,
+    setData,
+    loader,
+    setLoader
+  } = useFetch();
 
   useEffect(() => {
+    if(!allContestsRef.current) {
+      return;
+    }
+
     if (!prevFilterRef.current) {
       setData(allContestsRef.current);
       prevFilterRef.current = filter;
       return;
     }
+
+    setLoader(true);
 
     clearTimeout(timeoutRef.current);
 
@@ -80,13 +76,15 @@ export const ContestProvider = ({
 
         const matchesPlatform = filter.platform.includes(contest.platform);
 
-        const matchesTimeFrame = filter.timeFrame === contest.status;
-
+        const matchesTimeFrame = filter.timeFrame === contest.status || filter.timeFrame === Status.ALL;
+        
         return matchesSearch && matchesPlatform && matchesTimeFrame;
       });
 
       setData(filteredContests);
       prevFilterRef.current = filter;
+      
+      setLoader(false);
     }, 1000);
 
     return () => {

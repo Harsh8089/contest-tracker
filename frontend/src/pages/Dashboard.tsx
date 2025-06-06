@@ -1,6 +1,8 @@
 import ContestCard from "@/components/ContestCard";
 import FilterBar from "@/components/FilterBar";
 import Header from "@/components/Header";
+import NoContestsFound from "@/components/NoContestsFound";
+import { Loader } from "@/components/ui/loader";
 
 import {
   Tabs,
@@ -12,8 +14,10 @@ import { useContest } from "@/hooks/useContest";
 // import { contests } from "@/mock-data/contests";
 import { Status } from "@/types";
 
+const tabStatuses = Object.values(Status);
+
 const Dashboard = () => {
-  const { data: contests } = useContest();
+  const { data: contests, loader } = useContest();
 
   return <div className="flex flex-col justify-center px-22 py-5">
     <Header 
@@ -54,58 +58,26 @@ const Dashboard = () => {
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value={Status.ALL}>
-        <div className="grid grid-cols-3 gap-2.5">
-          {contests.map(contest => (
-              <ContestCard
-                key={contest.id}
-                contest={contest}
-              />
-          ))}
-        </div>
-      </TabsContent>
-      <TabsContent value={Status.UPCOMING}>
-        <div className="grid grid-cols-3 gap-2.5">
-        {
-          contests.
-          filter(contest => contest.status === Status.UPCOMING)
-          .map(contest => (
-            <ContestCard
-              key={contest.id}
-              contest={contest}
-            />
-          ))
-        }
-        </div>
-      </TabsContent>
-      <TabsContent value={Status.ONGOING}>
-      <div className="grid grid-cols-3 gap-2.5">
-        {
-          contests.
-          filter(contest => contest.status === Status.ONGOING)
-          .map(contest => (
-            <ContestCard
-              key={contest.id}
-              contest={contest}
-            />
-          ))
-        }
-        </div>
-      </TabsContent>
-      <TabsContent value={Status.COMPLETED}>
-      <div className="grid grid-cols-3 gap-2.5">
-        {
-          contests.
-          filter(contest => contest.status === Status.COMPLETED)
-          .map(contest => (
-            <ContestCard
-              key={contest.id}
-              contest={contest}
-            />
-          ))
-        }
-        </div>
-      </TabsContent>
+      {loader ? <Loader /> :
+        contests.length === 0 ? <NoContestsFound /> :
+          <>
+            {tabStatuses.map(status => (
+              <TabsContent key={status} value={status}>
+                <div className="grid grid-cols-3 gap-2.5">
+                  {(status === Status.ALL 
+                    ? contests 
+                    : contests.filter(contest => contest.status === status)
+                  ).map(contest => (
+                    <ContestCard 
+                      key={contest.id} 
+                      contest={contest} 
+                    />
+                  ))}
+                </div>
+              </TabsContent>
+            ))}
+          </>
+      }
     </Tabs>
   </div>
 }
