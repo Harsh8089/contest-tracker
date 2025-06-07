@@ -6,19 +6,18 @@ import {
   useState 
 } from "react";
 import { 
-  ContestPlatform, 
   Filter, 
   Status 
 } from "@/types";
 import { useFetch } from "@/hooks/useFetch";
 
-const defaultFilterState: Filter = {
+export const defaultFilterState: Filter = {
   searchContest: "",
   timeFrame: Status.ALL,
-  platform: [
-    ContestPlatform.CODECHEF, 
-    ContestPlatform.CODEFORCES, 
-    ContestPlatform.LEETCODE
+  platforms: [
+    { platform: "Codechef", checked: true },
+    { platform: "Codeforces", checked: true },
+    { platform: "Leetcode", checked: true }
   ],
 }
 
@@ -74,13 +73,15 @@ export const ContestProvider = ({
           .toLowerCase()
           .includes(filter.searchContest.toLowerCase());
 
-        const matchesPlatform = filter.platform.includes(contest.platform);
+        const matchesPlatform = filter.platforms.some(p => {
+          return p.platform.toLowerCase() === contest.platform.toLowerCase() && p.checked;
+        });
 
         const matchesTimeFrame = filter.timeFrame === contest.status || filter.timeFrame === Status.ALL;
         
         return matchesSearch && matchesPlatform && matchesTimeFrame;
       });
-
+      
       setData(filteredContests);
       prevFilterRef.current = filter;
       

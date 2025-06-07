@@ -16,46 +16,48 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
+import { defaultFilterState } from "@/context/ContestContext"
 import { useContest } from "@/hooks/useContest"
-import { ContestPlatform, Status } from "@/types"
-import { Bookmark, Filter, Search } from "lucide-react"
-import { useEffect, useState } from "react"
+import { Status } from "@/types"
+import { Filter, RotateCcw, Search } from "lucide-react"
 
 const FilterBar = () => {
-  const { setFilter, filter: { searchContest } } = useContest();
+  const { filter, setFilter } = useContest();
 
-  const [filters, setFilters] = useState([
-    { platform: "Codechef", checked: true },
-    { platform: "Codeforces", checked: true },
-    { platform: "Leetcode", checked: true }
-  ]);
+  const { 
+    searchContest,
+    timeFrame,
+    platforms   
+  } = filter;
 
   const handleToggle = (platform: any) => {
-    const isPlatformChecked = filters.filter(state => state.platform === platform)[0].checked;
-    const isNotChecked = filters.filter(state => state.checked === false).length;
-    if (filters.length - 1 <= isNotChecked && isPlatformChecked) {
+    const isPlatformChecked = platforms.filter(state => state.platform === platform)[0].checked;
+    const isNotChecked = platforms.filter(state => state.checked === false).length;
+    if (platforms.length - 1 <= isNotChecked && isPlatformChecked) {
       return;
-    }
+    } 
 
-    setFilters((state) => {
-      return state.map((filter) => {
-        if (filter.platform === platform) {
-          return { ...filter, checked: !filter.checked };
+    setFilter(filter => {
+      const platforms = filter.platforms;
+
+      const updatedPlatForms =  platforms.map(p => {
+        if(p.platform === platform) {
+          return {
+            ...p,
+            checked: !p.checked
+          }
+        } else {
+          return p;
         }
-        return filter;
       });
+
+      return {
+        ...filter,
+        platforms: updatedPlatForms
+      }
     });
   }
-
-  useEffect(() => {
-    setFilter(prev => ({
-      ...prev,
-      platform: filters
-      .filter(p => p.checked)
-      .map(p => p.platform.toLowerCase() as ContestPlatform)
-    }))
-  }, [filters]);
-
+  
   return <div className="w-full flex items-center justify-between space-x-4 p-4 glass-panel my-5">
     <div className="relative flex-10">
       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -75,6 +77,7 @@ const FilterBar = () => {
 
     <div className="flex-10">
       <Select
+        defaultValue={timeFrame}
         onValueChange={(value: Status) => {
           setFilter(prev => ({
             ...prev,
@@ -82,7 +85,7 @@ const FilterBar = () => {
           }));
         }}
       >
-        <SelectTrigger className="focus-visible:ring-0 focus-visible:ring-offset-0 w-full">
+        <SelectTrigger defaultValue={Status.ALL} className="focus-visible:ring-0 focus-visible:ring-offset-0 w-full">
           <SelectValue placeholder="Select time frame" />
         </SelectTrigger>
         <SelectContent>
@@ -116,14 +119,16 @@ const FilterBar = () => {
               Platforms
             </span>
             <div className="flex gap-2 items-center">
-              {filters.map((filter, index) => (
-                filter.checked && (
+              {filter.platforms.map((filter, index) => {
+                const platform = filter.platform.toLowerCase();
+
+                return filter.checked && (
                   <div
                     key={index}
-                    className={`${filter.platform === "Codechef" ? "bg-blue-600" : (filter.platform === "Codeforces" ? "bg-rose-950" : "bg-orange-600")} w-2 h-2 rounded-full`}
+                    className={style(platform)}
                   />
                 )
-              ))}
+              })}
             </div>
           </Button>
         </DropdownMenuTrigger>
@@ -135,20 +140,22 @@ const FilterBar = () => {
             Select Platforms
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {filters.map((filter, index) => (
-            <DropdownMenuCheckboxItem
+          {filter.platforms.map((p, index) => {
+            const platform = p.platform.toLowerCase();
+
+            return <DropdownMenuCheckboxItem
               key={index}
-              checked={filter.checked}
-              onClick={() => handleToggle(filter.platform)}
+              checked={p.checked}
+              onClick={() => handleToggle(p.platform)}
               className="cursor-pointer"
             >
               <div
                 key={index}
-                className={`${filter.platform === "Codechef" ? "bg-blue-600" : (filter.platform === "Codeforces" ? "bg-rose-950" : "bg-orange-600")} w-2 h-2 rounded-full`}
+                className={style(platform)}
               />
-              {filter.platform}
+              {p.platform}
             </DropdownMenuCheckboxItem>
-          ))}
+          })}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
@@ -156,12 +163,17 @@ const FilterBar = () => {
     <div className="flex-1">
       <Button
         variant={"outline"}
-        onClick={() => { }}
+        onClick={() => {
+          setFilter(defaultFilterState)
+        }}
       >
-        <Bookmark />
+        <RotateCcw />
       </Button>
     </div>
   </div>
 };
 
+const style = (platform: string) => `${platform === "codechef" ? 
+                                      "bg-blue-600" : (platform === "codeforces" ?
+                                        "bg-rose-950" : "bg-orange-600")} w-2 h-2 rounded-full`
 export default FilterBar;

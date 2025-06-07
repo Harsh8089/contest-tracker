@@ -62,8 +62,8 @@ const ContestCard: React.FC<ContestCardProps> = ({
       <header className="flex justify-between items-center">
         <div className="flex items-center gap-2">
           <div className={`${
-            contest.platform === ContestPlatform.CODECHEF ? 'text-blue-700 bg-blue-50' : 
-            contest.platform === ContestPlatform.CODEFORCES ? 'text-rose-950 bg-rose-50' : 'text-orange-800 bg-orange-50'
+            contest.platform.toUpperCase() === ContestPlatform.CODECHEF ? 'text-blue-700 bg-blue-50' : 
+            contest.platform.toUpperCase() === ContestPlatform.CODEFORCES ? 'text-rose-950 bg-rose-50' : 'text-orange-800 bg-orange-50'
           } text-[13px] px-2 py-1 rounded-md font-semibold`}>
             { getPlatformName(contest.platform) }
           </div>

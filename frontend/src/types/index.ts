@@ -1,8 +1,16 @@
 export enum ContestPlatform {
-  CODEFORCES = 'codeforces',
-  CODECHEF = 'codechef',
-  LEETCODE = 'leetcode',
+  CODEFORCES = 'CODEFORCES',
+  CODECHEF = 'CODECHEF',
+  LEETCODE = 'LEETCODE',
 }
+
+export const Platform = {
+  [ContestPlatform.CODECHEF]: 'codechef',
+  [ContestPlatform.CODEFORCES]: 'codeforces',
+  [ContestPlatform.LEETCODE]: 'leetcode',
+}
+
+type PlatformName = typeof Platform[keyof typeof Platform];
 
 export enum Status {
   ALL = 'all',
@@ -14,7 +22,7 @@ export enum Status {
 export type Contest = {
   id: string,
   name: string,
-  platform: ContestPlatform,
+  platform: PlatformName,
   status: Exclude<Status, Status.ALL>,
   startTime: string,
   endTime: string,
@@ -26,5 +34,8 @@ export type Contest = {
 export type Filter = {
   searchContest: string;
   timeFrame: Status;
-  platform: ContestPlatform[];
+  platforms: {
+    platform: PlatformName;
+    checked: boolean;
+  }[];
 }
