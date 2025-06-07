@@ -75,14 +75,14 @@ const ContestCard: React.FC<ContestCardProps> = ({
             { status }
           </div>
         </div>
-        <button
+        {/* <button
           onClick={(event) => {
             event.stopPropagation();
           }}
           className="group hover:bg-gray-200 p-2 rounded-full cursor-pointer transition-all duration-300"
         >
           <Bookmark className="h-4 w-4 group-hover:opacity-100 transition-transform"/>
-        </button>
+        </button> */}
       </header>
       <main>
         <h1 className="text-xl font-semibold mb-3">
