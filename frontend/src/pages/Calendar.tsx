@@ -14,6 +14,7 @@ import { useMemo, useState } from "react";
 // import { contests } from "@/mock-data/contests";
 import { Contest, ContestPlatform } from "@/types";
 import { useContest } from "@/hooks/useContest";
+import ContestCalendarView from "@/components/ContestCalendarView";
 
 interface DateInterface {
   month: number,
@@ -24,7 +25,8 @@ interface RenderCalendarCellProps {
   length: number,
   base?: number,
   date?: DateInterface,
-  contest?: Contest[]
+  contest?: Contest[],
+  setSelectedDateInfo?: (info: { date: Date, contests: Contest[] }) => void
 }
 
 const enum CalendarButton {
@@ -74,6 +76,7 @@ const Calendar = () => {
   const { data: contests } = useContest();
 
   const [date, setDate] = useState<Date>(new Date());
+  const [selectedDateInfo, setSelectedDateInfo] = useState<{ date: Date, contests: Contest[] } | null>(null);
 
   const { startDate, endDate } = getStartAndEndDateofMonth(date);
   const skipDays = startDate.getDay();
@@ -86,7 +89,7 @@ const Calendar = () => {
   );  
 
   return (
-    <div className="flex flex-col justify-center px-22 py-5">
+    <div className="flex flex-col justify-center px-22 py-5 w-full">
       <Header 
         title={"Contest Calendar"}
         subTitle={"View contests in a calendar layout"}
@@ -147,6 +150,7 @@ const Calendar = () => {
               base={1} 
               date={{ month: date.getMonth(), year: date.getFullYear() }} 
               contest={filterContest} 
+              setSelectedDateInfo={setSelectedDateInfo}
             />}
           </div>
 
@@ -158,6 +162,7 @@ const Calendar = () => {
               date={{ month: date.getMonth(), 
               year: date.getFullYear() }} 
               contest={filterContest} 
+              setSelectedDateInfo={setSelectedDateInfo}
             />}
           </div>
 
@@ -168,6 +173,7 @@ const Calendar = () => {
               base={1 + (7 - skipDays) + 7 * (totalRows - 2)} 
               date={{ month: date.getMonth(), year: date.getFullYear() }}
               contest={filterContest}
+              setSelectedDateInfo={setSelectedDateInfo}
             />}
             {<RenderCalendarCell 
               length={7 - (totalDays - (7 - skipDays + 7 * (totalRows - 2)))}
@@ -177,6 +183,8 @@ const Calendar = () => {
         </div> : 
         null 
       }
+
+      <ContestCalendarView selectedDateInfo={selectedDateInfo} />
     </div>
   )
 }
@@ -185,7 +193,8 @@ const RenderCalendarCell = ({
   length,
   base,
   date,
-  contest
+  contest,
+  setSelectedDateInfo
 }: RenderCalendarCellProps) => {
   return <>
     {Array.from({ length }, (_, index) => {
@@ -193,7 +202,13 @@ const RenderCalendarCell = ({
       
       const day = index + base;
 
-      return <FilledCell key={index} day={day} date={date} contest={contest!} />
+      return <FilledCell 
+        key={index} 
+        day={day} 
+        date={date} 
+        contest={contest!}
+        setSelectedDateInfo={setSelectedDateInfo!} 
+      />
     })}
   </>
 }
@@ -205,11 +220,13 @@ const EmptyCell = () => {
 const FilledCell = ({
   day,
   date,
-  contest
+  contest,
+  setSelectedDateInfo
 }: {
   day: number,
   date: DateInterface,
-  contest: Contest[]
+  contest: Contest[],
+  setSelectedDateInfo: (info: { date: Date, contests: Contest[] }) => void
 }) => {
   const today = new Date();
   const isToday = today.getDate() === day && today.getMonth() === date.month && today.getFullYear() === date.year;
@@ -229,10 +246,15 @@ const FilledCell = ({
 
   return (
     <div
-      onClick={() => {}}
+      onClick={() => {
+        setSelectedDateInfo({
+          date: new Date(date.year, date.month, day),
+          contests: contest.filter(c => new Date(c.startTime).getDate() === day)
+        });
+      }}
       className={`${
         isToday ? "bg-gray-300 dark:bg-gray-600" : "bg-gray-100 dark:bg-gray-800"
-      } h-20 w-full p-3 border-r border-b border-gray-200 dark:border-gray-700 text-sm font-semibold flex flex-col justify-between text-gray-900 dark:text-gray-100`}
+      } h-20 w-full p-3 border-r border-b border-gray-200 dark:border-gray-700 text-sm font-semibold flex flex-col justify-between text-gray-900 dark:text-gray-100 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700`}
     >
       <div className={`${isToday ? "bg-black dark:bg-white text-white dark:text-black w-5 h-5 rounded-full flex justify-center items-center" : ""}`}>{day}</div>
       <div className="flex gap-1 items-center">{contestIndicators}</div>

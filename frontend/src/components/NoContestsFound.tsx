@@ -11,10 +11,10 @@ export default function NoContestsFound() {
           <Search className="w-4 h-4 text-gray-400" />
         </div>
       </div>
-      <h3 className="text-xl font-semibold text-gray-800 mb-2">
+      <h3 className="text-xl font-semibold text-gray-800 mb-2 dark:text-white">
         No Contests Found
       </h3>
-      <p className="text-gray-500 text-center max-w-md mb-6">
+      <p className="text-gray-500 text-center max-w-md mb-6 dark:text-white">
         There are no active contests for the applied filters.
       </p>
     </div>
