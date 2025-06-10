@@ -1,6 +1,7 @@
 import {
   Calendar,
   House,
+  Moon,
   RefreshCcw,
   Settings,
   Sun
@@ -16,6 +17,7 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from "@radix-ui/react-tooltip";
+import { useTheme } from "next-themes";
 
 const navItems = [
   {
@@ -39,7 +41,9 @@ export default function Navbar() {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  return <header className="sticky top-0 z-10 border-b border-border px-22 bg-white">
+  const { theme, setTheme } = useTheme();
+
+  return <header className="sticky top-0 z-10 border-b border-border px-22 bg-white dark:bg-black dark:text-white">
     <div className="w-full flex items-center justify-between py-4">
       <h1 className="text-xl font-bold">
         Contest Tracker
@@ -75,12 +79,17 @@ export default function Navbar() {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                onClick={() => { }}
+                onClick={() => {
+                  theme === 'dark' ? setTheme('light') : setTheme('dark');
+                }}
                 variant={"ghost"}
                 size={"icon"}
                 className="p-2"
               >
-                <Sun className="w-5 h-5" />
+                {theme === 'dark' ?
+                  <Moon className="w-5 h-5" /> :
+                  <Sun className="w-5 h-5" />
+                }
               </Button>
             </TooltipTrigger>
             <TooltipContent

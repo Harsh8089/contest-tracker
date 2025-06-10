@@ -63,7 +63,7 @@ const FilterBar = () => {
       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
       <Input
         type="text"
-        className="pl-9 pr-8 focus:border-black focus:border-2"
+        className="pl-9 pr-8 focus:border-black dark:focus:border-white focus:border-2"
         placeholder="Search contests..."
         value={searchContest}
         onChange={(e) => {
@@ -89,7 +89,7 @@ const FilterBar = () => {
           <SelectValue placeholder="Select time frame" />
         </SelectTrigger>
         <SelectContent>
-          <SelectGroup className="bg-white">
+          <SelectGroup className="bg-white dark:bg-gray-900">
             <SelectItem value={Status.ALL}>
               All Contests
             </SelectItem>
@@ -134,9 +134,9 @@ const FilterBar = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className="bg-white min-w-56"
+          className="bg-white dark:bg-gray-900 min-w-56"
         >
-          <DropdownMenuLabel className="border-b">
+          <DropdownMenuLabel className="border-b border-gray-200 dark:border-gray-700">
             Select Platforms
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
@@ -175,5 +175,5 @@ const FilterBar = () => {
 
 const style = (platform: string) => `${platform === "codechef" ? 
                                       "bg-blue-600" : (platform === "codeforces" ?
-                                        "bg-rose-950" : "bg-orange-600")} w-2 h-2 rounded-full`
+                                        "bg-rose-950 dark:bg-rose-800" : "bg-orange-600")} w-2 h-2 rounded-full`
 export default FilterBar;

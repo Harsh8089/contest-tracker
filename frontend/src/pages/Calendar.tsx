@@ -96,7 +96,7 @@ const Calendar = () => {
 
       {contests.length ? <div>
           <div className="flex justify-between items-center">
-            <h1 className="text-xl font-semibold my-6">
+            <h1 className="text-xl font-semibold my-6 text-gray-900 dark:text-gray-100">
               <span className="mr-1">
                 { getMonthforDate(startDate) }
               </span>
@@ -130,7 +130,7 @@ const Calendar = () => {
             {days.map((day, index) => (
               <div
                 key={index}
-                className={`py-2 text-center border-r border-b text-sm font-semibold bg-gray-50`}
+                className={`py-2 text-center border-r border-b border-gray-200 dark:border-gray-700 text-sm font-semibold bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100`}
               >
                 {day}
               </div>
@@ -199,7 +199,7 @@ const RenderCalendarCell = ({
 }
 
 const EmptyCell = () => {
-  return <div className="bg-gray-100 h-20 w-full border-r"></div>
+  return <div className="bg-gray-100 dark:bg-gray-900 h-20 w-full border-r border-gray-200 dark:border-gray-700"></div>
 }
 
 const FilledCell = ({
@@ -219,11 +219,11 @@ const FilledCell = ({
     const colors = {
       [ContestPlatform.LEETCODE]: "bg-orange-600",
       [ContestPlatform.CODECHEF]: "bg-blue-600",
-      [ContestPlatform.CODEFORCES]: "bg-rose-950",
+      [ContestPlatform.CODEFORCES]: "bg-rose-950 dark:bg-rose-800",
     };
 
     return platforms
-      .filter(platform => contest.some(c => c.platform === platform && new Date(c.startTime).getDate() === day))
+      .filter(platform => contest.some(c => c.platform.toUpperCase() === platform && new Date(c.startTime).getDate() === day))
       .map(platform => <div key={platform} className={`${colors[platform]} w-2 h-2 rounded-full`} />);
   }, [contest, day]);
 
@@ -231,10 +231,10 @@ const FilledCell = ({
     <div
       onClick={() => {}}
       className={`${
-        isToday ? "bg-gray-300" : "bg-gray-100"
-      } h-20 w-full p-3 border-r border-b text-sm font-semibold flex flex-col justify-between`}
+        isToday ? "bg-gray-300 dark:bg-gray-600" : "bg-gray-100 dark:bg-gray-800"
+      } h-20 w-full p-3 border-r border-b border-gray-200 dark:border-gray-700 text-sm font-semibold flex flex-col justify-between text-gray-900 dark:text-gray-100`}
     >
-      <div>{day}</div>
+      <div className={`${isToday ? "bg-black dark:bg-white text-white dark:text-black w-5 h-5 rounded-full flex justify-center items-center" : ""}`}>{day}</div>
       <div className="flex gap-1 items-center">{contestIndicators}</div>
     </div>
   );

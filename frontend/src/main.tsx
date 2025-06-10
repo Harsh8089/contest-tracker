@@ -3,11 +3,14 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { ContestProvider } from './context/ContestContext.tsx'
+import { ThemeProvider } from 'next-themes'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ContestProvider>
-      <App />
-    </ContestProvider>
+    <ThemeProvider attribute="class">
+      <ContestProvider>
+        <App />
+      </ContestProvider>
+    </ThemeProvider>
   </StrictMode>,
 )

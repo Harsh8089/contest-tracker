@@ -31,28 +31,40 @@ const Dashboard = () => {
       defaultValue={Status.ALL}
       className="my-2"
     >
-      <TabsList className="grid grid-cols-4 mb-6">
-        <TabsTrigger value={Status.ALL}>
+      <TabsList className="grid grid-cols-4 mb-6 bg-gray-100 dark:bg-gray-800">
+        <TabsTrigger 
+          value={Status.ALL}
+          className="data-[state=active]:bg-white data-[state=active]:text-gray-900 dark:data-[state=active]:bg-gray-700 dark:data-[state=active]:text-gray-100 text-gray-600 dark:text-gray-300"
+        >
           All
-          <span className="ml-2 text-xs bg-secondary rounded-full px-2 py-0.5">
+          <span className="ml-2 text-xs bg-secondary dark:bg-gray-600 rounded-full px-2 py-0.5 text-gray-700 dark:text-gray-200">
             { contests.length }
           </span>
         </TabsTrigger>
-        <TabsTrigger value={Status.UPCOMING}>
+        <TabsTrigger 
+          value={Status.UPCOMING}
+          className="data-[state=active]:bg-white data-[state=active]:text-gray-900 dark:data-[state=active]:bg-gray-700 dark:data-[state=active]:text-gray-100 text-gray-600 dark:text-gray-300"
+        >
           Upcoming
-          <span className="ml-2 text-xs bg-secondary rounded-full px-2 py-0.5">
+          <span className="ml-2 text-xs bg-secondary dark:bg-gray-600 rounded-full px-2 py-0.5 text-gray-700 dark:text-gray-200">
             { contests.filter(contest => contest.status === Status.UPCOMING).length }
           </span>
         </TabsTrigger>
-        <TabsTrigger value={Status.ONGOING}>
+        <TabsTrigger 
+          value={Status.ONGOING}
+          className="data-[state=active]:bg-white data-[state=active]:text-gray-900 dark:data-[state=active]:bg-gray-700 dark:data-[state=active]:text-gray-100 text-gray-600 dark:text-gray-300"
+        >
           Ongoing
-          <span className="ml-2 text-xs bg-secondary rounded-full px-2 py-0.5">
+          <span className="ml-2 text-xs bg-secondary dark:bg-gray-600 rounded-full px-2 py-0.5 text-gray-700 dark:text-gray-200">
             { contests.filter(contest => contest.status === Status.ONGOING).length }
           </span>
         </TabsTrigger>
-        <TabsTrigger value={Status.COMPLETED}>
+        <TabsTrigger 
+          value={Status.COMPLETED}
+          className="data-[state=active]:bg-white data-[state=active]:text-gray-900 dark:data-[state=active]:bg-gray-700 dark:data-[state=active]:text-gray-100 text-gray-600 dark:text-gray-300"
+        >
           Past
-          <span className="ml-2 text-xs bg-secondary rounded-full px-2 py-0.5">
+          <span className="ml-2 text-xs bg-secondary dark:bg-gray-600 rounded-full px-2 py-0.5 text-gray-700 dark:text-gray-200">
             { contests.filter(contest => contest.status === Status.COMPLETED).length }
           </span>
         </TabsTrigger>
