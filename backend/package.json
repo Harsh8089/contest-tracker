@@ -4,7 +4,10 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"dev": "nodemon"
+		"dev": "nodemon",
+		"build": "tsc -b .",
+		"start": "node ./dist/server.js",
+    "start:prod": "npm run build && npm run start"	
 	},
 	"keywords": [],
 	"author": "",
