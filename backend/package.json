@@ -5,9 +5,9 @@
 	"main": "index.js",
 	"scripts": {
 		"dev": "nodemon",
-		"build": "tsc -b .",
-		"start": "node ./dist/server.js",
-		"start:prod": "npm run build && npm run start"
+ 		"build": "pnpm install --frozen-lockfile && tsc -b .",
+ 		"start": "node ./dist/server.js",
+		"start:prod": "pnpm run build && pnpm run start"
 	},
 	"keywords": [],
 	"author": "",
