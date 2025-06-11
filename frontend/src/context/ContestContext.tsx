@@ -24,12 +24,12 @@ export const defaultFilterState: Filter = {
 export const ContestContext = createContext<{
   filter: Filter;
   setFilter: React.Dispatch<React.SetStateAction<Filter>>;
-  data: any[];
+  data: any[] | null;
   loader: boolean
 }>({
   filter: defaultFilterState,
   setFilter: () => {},
-  data: [],
+  data: null,
   loader: true
 });
 

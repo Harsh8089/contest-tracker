@@ -19,6 +19,8 @@ const tabStatuses = Object.values(Status);
 const Dashboard = () => {
   const { data: contests, loader } = useContest();
 
+  if(!contests) return;
+
   return <div className="flex flex-col justify-center px-22 py-5">
     <Header 
       title={"Contest Dashboard"}

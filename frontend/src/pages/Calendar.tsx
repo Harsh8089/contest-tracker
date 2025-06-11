@@ -75,6 +75,8 @@ const getContest = (contests: Contest[], month: number, year: number) => {
 const Calendar = () => {
   const { data: contests } = useContest();
 
+  if(!contests) return;
+  
   const [date, setDate] = useState<Date>(new Date());
   const [selectedDateInfo, setSelectedDateInfo] = useState<{ date: Date, contests: Contest[] } | null>(null);
 
